@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIAKAD Prima - Portal Mahasiswa</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f1f5f9;
+      color: #172033;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+    }
+
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0b1528, #1e40af);
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .25);
+    }
+
+    .login-box h1 {
+      margin-top: 0;
+      color: #1e3a8a;
+    }
+
+    .login-box p {
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .demo-button {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      text-align: left;
+      background: #eff6ff;
+      color: #1e3a8a;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .demo-button:hover {
+      background: #dbeafe;
+    }
+
+    label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      padding: 11px;
+      background: white;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .primary-button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 18px;
+      background: #1e40af;
+      color: white;
+      border-radius: 9px;
+      font-weight: bold;
+    }
+
+    .primary-button:hover {
+      background: #1e3a8a;
+    }
+
+    .app {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 245px;
+      background: #0b1528;
+      color: white;
+      padding: 24px 16px;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: bold;
+      color: #fbbf24;
+      margin-bottom: 30px;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 5px 0;
+      border-radius: 8px;
+      text-align: left;
+      background: transparent;
+      color: #cbd5e1;
+    }
+
+    .sidebar button:hover,
+    .sidebar button.active {
+      background: #1e40af;
+      color: white;
+    }
+
+    .logout-button {
+      margin-top: 40px !important;
+      color: #fca5a5 !important;
+    }
+
+    .content {
+      margin-left: 245px;
+      padding: 32px;
+      max-width: 1400px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 18px 24px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, .06);
+    }
+
+    .topbar strong {
+      color: #1e3a8a;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page h2 {
+      margin-top: 0;
+      color: #0f172a;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, .06);
+    }
+
+    .stat-card {
+      border-left: 5px solid #1e40af;
+    }
+
+    .stat-card h3 {
+      font-size: 28px;
+      margin: 0 0 8px;
+      color: #1e40af;
+    }
+
+    .stat-card p {
+      margin: 0;
+      color: #64748b;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .badge.green {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .badge.yellow {
+      color: #92400e;
+      background: #fef3c7;
+    }
+
+    .badge.blue {
+      color: #1e3a8a;
+      background: #dbeafe;
+    }
+
+    .schedule-item,
+    .task-item {
+      border: 1px solid #e2e8f0;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .schedule-item h3,
+    .task-item h3 {
+      margin: 0 0 8px;
+    }
+
+    .schedule-item p,
+    .task-item p {
+      margin: 5px 0;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .camera-box {
+      background: #020617;
+      border-radius: 14px;
+      overflow: hidden;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    video,
+    #photoPreview {
+      width: 100%;
+      max-height: 380px;
+      object-fit: cover;
+    }
+
+    #photoPreview {
+      display: none;
+    }
+
+    .camera-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .small-button {
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: #e2e8f0;
+      color: #172033;
+      font-weight: bold;
+    }
+
+    .small-button.blue {
+      background: #1e40af;
+      color: white;
+    }
+
+    .small-button.green {
+      background: #16a34a;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .payment-box {
+      background: #0b1528;
+      color: white;
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .payment-box h2 {
+      color: white;
+    }
+
+    .amount {
+      font-size: 32px;
+      font-weight: bold;
+      color: #fbbf24;
+    }
+
+    .success-message {
+      display: none;
+      margin-top: 14px;
+      background: #dcfce7;
+      color: #166534;
+      padding: 14px;
+      border-radius: 9px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+        min-height: auto;
+      }
+
+      .sidebar button {
+        display: inline-block;
+        width: auto;
+        margin-right: 4px;
+      }
+
+      .logout-button {
+        margin-top: 10px !important;
+      }
+
+      .content {
+        margin-left: 0;
+        padding: 16px;
+      }
+
+      .grid,
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        gap: 10px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HALAMAN LOGIN -->
+  <section id="loginPage" class="login-page">
+    <div class="login-box">
+      <h1>SIAKAD Prima</h1>
+      <p>Portal akademik mahasiswa Universitas Nusantara Mandiri.</p>
+
+      <h3>Login cepat akun demo</h3>
+
+      <button class="demo-button" onclick="loginDemo('Siti Rahmawati', '22104018')">
+        Siti Rahmawati<br>
+        <small>NIM: 22104018 · Teknik Informatika</small>
+      </button>
+
+      <button class="demo-button" onclick="loginDemo('Budi Pratama', '21102045')">
+        Budi Pratama<br>
+        <small>NIM: 21102045 · Sistem Informasi</small>
+      </button>
+
+      <hr>
+
+      <label>NIM</label>
+      <input id="nimInput" placeholder="Contoh: 22104018">
+
+      <label>Password</label>
+      <input id="passwordInput" type="password" placeholder="prima123">
+
+      <button class="primary-button" onclick="loginManual()">
+        Masuk ke Portal
+      </button>
+
+      <p style="font-size: 13px;">
+        Password akun demo: <b>prima123</b>
+      </p>
+    </div>
+  </section>
+
+  <!-- APLIKASI -->
+  <section id="appPage" class="app">
+
+    <aside class="sidebar">
+      <div class="brand">✦ SIAKAD PRIMA</div>
+
+      <button onclick="showPage('dashboard')" class="active">Dashboard</button>
+      <button onclick="showPage('presensi')">📷 Presensi Foto</button>
+      <button onclick="showPage('jadwal')">📅 Jadwal Kuliah</button>
+      <button onclick="showPage('tugas')">📄 Tugas Kuliah</button>
+      <button onclick="showPage('ujian')">🎓 UTS & UAS</button>
+      <button onclick="showPage('spp')">💳 Tagihan SPP</button>
+      <button onclick="showPage('profil')">👤 Profil Mahasiswa</button>
+
+      <button class="logout-button" onclick="logout()">Keluar</button>
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <div>
+          <strong>SIAKAD Prima</strong><br>
+          <small>Semester Ganjil 2025/2026</small>
+        </div>
+
+        <div>
+          <span class="badge green">● Sistem Online</span>
+          <span id="studentNameTop"></span>
+        </div>
+      </div>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="page active">
+        <h2>Selamat datang, <span id="studentName"></span> 👋</h2>
+        <p>Pantau kegiatan akademik kamu dari satu tempat.</p>
+
+        <div class="grid">
+          <div class="card stat-card">
+            <h3>3.82</h3>
+            <p>IPK Kumulatif</p>
+          </div>
+
+          <div class="card stat-card">
+            <h3>118</h3>
+            <p>SKS Ditempuh</p>
+          </div>
+
+          <div class="card stat-card">
+            <h3>96%</h3>
+            <p>Kehadiran</p>
+          </div>
+
+          <div class="card stat-card">
+            <h3>Rp4,5 jt</h3>
+            <p>Tagihan SPP</p>
+          </div>
+        </div>
+
+        <div class="two-column">
+          <div class="card">
+            <h3>Jadwal Kuliah Berikutnya</h3>
+            <div class="schedule-item">
+              <h3>Pemrograman Web Lanjut</h3>
+              <p>Senin · 08:00 - 09:40</p>
+              <p>Lab Komputer 3 · 3 SKS</p>
+              <span class="badge blue">Akan Datang</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Tugas Prioritas</h3>
+            <div class="task-item">
+              <h3>Membangun REST API</h3>
+              <p>Tenggat: 08 Oktober 2025</p>
+              <span class="badge yellow">Belum Dikumpulkan</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRESENSI -->
+      <section id="presensi" class="page">
+        <h2>Presensi Foto</h2>
+        <p>Ambil foto untuk mencatat kehadiran kuliah.</p>
+
+        <div class="two-column">
+          <div class="card">
+            <label>Mata Kuliah</label>
+            <select id="courseSelect">
+              <option>Pemrograman Web Lanjut</option>
+              <option>Basis Data Terdistribusi</option>
+              <option>Interaksi Manusia & Komputer</option>
+            </select>
+
+            <div class="camera-box" style="margin-top: 15px;">
+              <video id="camera" autoplay></video>
+              <img id="photoPreview" alt="Foto presensi">
+            </div>
+
+            <div class="camera-actions">
+              <button class="small-button blue" onclick="startCamera()">
+                Aktifkan Kamera
+              </button>
+
+              <button class="small-button" onclick="takePhoto()">
+                Ambil Foto
+              </button>
+
+              <label class="small-button">
+                Upload Foto
+                <input type="file" accept="image/*" onchange="uploadPhoto(event)" hidden>
+              </label>
+
+              <button class="small-button green" onclick="submitAttendance()">
+                Kirim Presensi
+              </button>
+            </div>
+
+            <div id="attendanceMessage" class="success-message">
+              Presensi berhasil dicatat.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Status Presensi</h3>
+            <p>📍 Lokasi: Gedung Rektorat</p>
+            <p>✅ GPS: Dalam area kampus</p>
+            <p>🕒 Waktu server: 07:52 WIB</p>
+            <p>🛡️ Foto hanya digunakan untuk simulasi pencatatan kehadiran.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Riwayat Presensi</h3>
+
+          <table>
+            <tr>
+              <th>Mata Kuliah</th>
+              <th>Waktu</th>
+              <th>Lokasi</th>
+              <th>Status</th>
+            </tr>
+            <tr>
+              <td>Basis Data Terdistribusi</td>
+              <td>06 Oktober 2025, 07:50</td>
+              <td>Ruang Teori 402</td>
+              <td><span class="badge green">Hadir</span></td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- JADWAL -->
+      <section id="jadwal" class="page">
+        <h2>Jadwal Kuliah</h2>
+
+        <div class="card">
+          <div class="schedule-item">
+            <h3>Senin · Pemrograman Web Lanjut</h3>
+            <p>08:00 - 09:40 · Lab Komputer 3</p>
+            <p>Dosen: Andi Setiawan, M.Kom. · 3 SKS</p>
+          </div>
+
+          <div class="schedule-item">
+            <h3>Selasa · Basis Data Terdistribusi</h3>
+            <p>10:00 - 11:40 · Ruang Teori 402</p>
+            <p>Dosen: Dr. Rina Kartika, M.Kom. · 3 SKS</p>
+          </div>
+
+          <div class="schedule-item">
+            <h3>Rabu · Interaksi Manusia & Komputer</h3>
+            <p>13:00 - 14:40 · Studio Digital</p>
+            <p>Dosen: Maya Lestari, M.Ds. · 3 SKS</p>
+          </div>
+
+          <div class="schedule-item">
+            <h3>Kamis · Kecerdasan Buatan</h3>
+            <p>08:00 - 09:40 · Lab AI 1</p>
+            <p>Dosen: Fajar Ramadhan, Ph.D. · 3 SKS</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TUGAS -->
+      <section id="tugas" class="page">
+        <h2>Tugas Kuliah</h2>
+
+        <div class="card">
+          <div class="task-item">
+            <h3>Membangun REST API dengan FastAPI</h3>
+            <p>Mata kuliah: Pemrograman Web Lanjut</p>
+            <p>Tenggat: 08 Oktober 2025</p>
+            <span id="taskStatus" class="badge yellow">Belum Dikumpulkan</span>
+
+            <label>Upload tugas</label>
+            <input id="taskFile" type="file" accept=".pdf,.docx,.zip">
+
+            <label>Catatan untuk dosen</label>
+            <textarea id="taskNote" placeholder="Tuliskan catatan jika diperlukan"></textarea>
+
+            <button class="small-button blue" onclick="submitTask()">
+              Kirim Tugas
+            </button>
+
+            <div id="taskMessage" class="success-message">
+              Tugas berhasil dikirim.
+            </div>
+          </div>
+
+          <div class="task-item">
+            <h3>Audit Usability Aplikasi Kampus</h3>
+            <p>Mata kuliah: Interaksi Manusia & Komputer</p>
+            <span class="badge green">Dinilai · Nilai 92</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- UJIAN -->
+      <section id="ujian" class="page">
+        <h2>Jadwal UTS & UAS</h2>
+
+        <div class="card">
+          <h3>Jadwal UTS</h3>
+
+          <table>
+            <tr>
+              <th>Tanggal</th>
+              <th>Mata Kuliah</th>
+              <th>Waktu</th>
+              <th>Ruang</th>
+              <th>Kursi</th>
+            </tr>
+            <tr>
+              <td>20 Oktober 2025</td>
+              <td>Pemrograman Web Lanjut</td>
+              <td>08:00 - 10:00</td>
+              <td>Lab Komputer 3</td>
+              <td>A-12</td>
+            </tr>
+            <tr>
+              <td>22 Oktober 2025</td>
+              <td>Basis Data Terdistribusi</td>
+              <td>13:00 - 15:00</td>
+              <td>Ruang Teori 402</td>
+              <td>B-08</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>Jadwal UAS</h3>
+
+          <table>
+            <tr>
+              <th>Tanggal</th>
+              <th>Mata Kuliah</th>
+              <th>Waktu</th>
+              <th>Ruang</th>
+            </tr>
+            <tr>
+              <td>15 Desember 2025</td>
+              <td>Pemrograman Web Lanjut</td>
+              <td>08:00 - 10:00</td>
+              <td>Lab Komputer 3</td>
+            </tr>
+            <tr>
+              <td>17 Desember 2025</td>
+              <td>Basis Data Terdistribusi</td>
+              <td>13:00 - 15:00</td>
+              <td>Ruang Teori 402</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- SPP -->
+      <section id="spp" class="page">
+        <h2>Tagihan & Pembayaran SPP</h2>
+
+        <div class="two-column">
+          <div class="payment-box">
+            <h2>Tagihan Semester Ganjil</h2>
+            <div class="amount">Rp4.500.000</div>
+            <p>Jatuh tempo: 15 Oktober 2025</p>
+
+            <button class="small-button green" onclick="paySPP()">
+              Simulasikan Pembayaran
+            </button>
+
+            <div id="paymentMessage" class="success-message">
+              Pembayaran berhasil. Status SPP sudah lunas.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Rincian Tagihan</h3>
+
+            <p>SPP tetap: <b>Rp2.500.000</b></p>
+            <p>SPP variabel: <b>Rp1.500.000</b></p>
+            <p>Laboratorium: <b>Rp500.000</b></p>
+            <hr>
+            <p>Total: <b>Rp4.500.000</b></p>
+
+            <label>Metode Pembayaran</label>
+            <select>
+              <option>Virtual Account BCA</option>
+              <option>Virtual Account Mandiri</option>
+              <option>QRIS</option>
+              <option>Gopay</option>
+            </select>
+
+            <p style="color: #92400e; font-size: 13px;">
+              Pembayaran ini hanya simulasi dan tidak memotong saldo asli.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFIL -->
+      <section id="profil" class="page">
+        <h2>Profil Mahasiswa</h2>
+
+        <div class="card">
+          <h3 id="profileName">Siti Rahmawati</h3>
+          <p>NIM: <b id="profileNim">22104018</b></p>
+          <p>Program Studi: <b>Teknik Informatika</b></p>
+          <p>Semester: <b>5</b></p>
+          <p>Email: <b>siti.rahmawati@prima.ac.id</b></p>
+          <p>Dosen Pembimbing: <b>Dr. Rina Kartika, M.Kom.</b></p>
+          <span class="badge green">Mahasiswa Aktif</span>
+        </div>
+      </section>
+    </main>
+  </section>
+
+  <script>
+    let currentStudent = {
+      name: "Siti Rahmawati",
+      nim: "22104018"
+    };
+
+    let cameraStream = null;
+    let capturedPhoto = null;
+
+    function loginDemo(name, nim) {
+      currentStudent.name = name;
+      currentStudent.nim = nim;
+      openApp();
+    }
+
+    function loginManual() {
+      const nim = document.getElementById("nimInput").value;
+      const password = document.getElementById("passwordInput").value;
+
+      if (
+        (nim === "22104018" || nim === "21102045") &&
+        password === "prima123"
+      ) {
+        const name = nim === "22104018"
+          ? "Siti Rahmawati"
+          : "Budi Pratama";
+
+        loginDemo(name, nim);
+      } else {
+        alert("NIM atau password salah.");
+      }
+    }
+
+    function openApp() {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("appPage").style.display = "block";
+
+      document.getElementById("studentName").textContent = currentStudent.name;
+      document.getElementById("studentNameTop").textContent =
+        " · " + currentStudent.name;
+
+      document.getElementById("profileName").textContent =
+        currentStudent.name;
+
+      document.getElementById("profileNim").textContent =
+        currentStudent.nim;
+    }
+
+    function logout() {
+      document.getElementById("appPage").style.display = "none";
+      document.getElementById("loginPage").style.display = "flex";
+    }
+
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+      });
+
+      document.getElementById(pageId).classList.add("active");
+
+      document.querySelectorAll(".sidebar button").forEach(button => {
+        button.classList.remove("active");
+      });
+
+      event.target.classList.add("active");
+    }
+
+    async function startCamera() {
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: true
+        });
+
+        document.getElementById("camera").srcObject = cameraStream;
+      } catch (error) {
+        alert("Kamera tidak dapat diakses. Gunakan upload foto.");
+      }
+    }
+
+    function takePhoto() {
+      const video = document.getElementById("camera");
+      const preview = document.getElementById("photoPreview");
+
+      if (!cameraStream) {
+        alert("Aktifkan kamera terlebih dahulu.");
+        return;
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const context = canvas.getContext("2d");
+      context.drawImage(video, 0, 0);
+
+      capturedPhoto = canvas.toDataURL("image/jpeg");
+
+      preview.src = capturedPhoto;
+      preview.style.display = "block";
+      video.style.display = "none";
+    }
+
+    function uploadPhoto(event) {
+      const file = event.target.files[0];
+
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = function () {
+        capturedPhoto = reader.result;
+
+        document.getElementById("photoPreview").src = capturedPhoto;
+        document.getElementById("photoPreview").style.display = "block";
+        document.getElementById("camera").style.display = "none";
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function submitAttendance() {
+      if (!capturedPhoto) {
+        alert("Ambil atau upload foto terlebih dahulu.");
+        return;
+      }
+
+      document.getElementById("attendanceMessage").style.display = "block";
+    }
+
+    function submitTask() {
+      const file = document.getElementById("taskFile").files[0];
+
+      if (!file) {
+        alert("Pilih file tugas terlebih dahulu.");
+        return;
+      }
+
+      document.getElementById("taskStatus").textContent = "Terkirim";
+      document.getElementById("taskStatus").className = "badge green";
+      document.getElementById("taskMessage").style.display = "block";
+    }
+
+    function paySPP() {
+      document.getElementById("paymentMessage").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
